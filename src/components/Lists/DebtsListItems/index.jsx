@@ -65,17 +65,19 @@ function DebtsListItems() {
     try {
       if (searchDebts) {
         const { data, ok } = await listDebtsService(token, searchDebts);
+        console.log(data)
         if (!ok) {
           setDebtsList([]);
-          return toast.warning(data);
+          return toast.warning("Nenhuma cobrança encontrada");
         }
-
+        
         setDebtsList(data);
       } else {
         const { data, ok } = await listDebtsService(token);
+        console.log(data,ok)
         if (!ok) {
           setDebtsList([]);
-          return toast.warning(data);
+          return toast.warning("Nenhuma cobrança encontrada");
         }
 
         setDebtsList(data);

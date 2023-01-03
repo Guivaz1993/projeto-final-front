@@ -47,51 +47,60 @@ function Resume() {
   async function loadHomeData() {
     try {
       const sumD = await sumDebts(token);
-      verifyOk(sumD.ok, sumD.data);
-      setSumExpiredDebts(sumD.data[0].sum);
-      setSumPendingDebts(sumD.data[1].sum);
-      setSumPaidDebts(sumD.data[2].sum);
+      // verifyOk(sumD.ok, sumD.data);
+      setSumExpiredDebts(sumD.ok?sumD.data.filter((iten)=>iten.status==="Vencida")[0].sum:0);
+      setSumPendingDebts(sumD.ok? sumD.data.filter((iten)=>iten.status==="Pendente")[0].sum:0);
+      setSumPaidDebts(sumD.ok?sumD.data.filter((iten)=>iten.status==="Pago")[0].sum:0);
 
       const countD = await countDebts(token);
-      verifyOk(countD.ok, countD.data);
-      setCountExpiredDebts(countD.data[0].count);
-      setCountPendingDebts(countD.data[1].count);
-      setCountPaidDebts(countD.data[2].count);
+      // verifyOk(countD.ok, countD.data);
+      console.log(countD,"conta debts")
+      setCountExpiredDebts(countD.ok? countD.data.filter((iten)=>iten.status==="Vencida")[0].count:0);
+      setCountPendingDebts(countD.ok?countD.data.filter((iten)=>iten.status==="Pendente")[0].count:0);
+      setCountPaidDebts(countD.ok? countD.data.filter((iten)=>iten.status==="Pago")[0].count:0);
 
       const countC = await countClients(token);
-      verifyOk(countC.ok, countC.data);
-      setCountDefaulterClients(countC.data[0].count);
-      setCountDebtFreeClients(countC.data[1].count);
+      console.log(countC,"conta clientes")
+      console.log(countC.data.filter((iten)=>iten.status!=="Inadimplente").length)
+        // verifyOk(countC.ok, countC.data);
+        setCountDefaulterClients( countC.data[0]?countC.data.filter((iten)=>iten.status==="Inadimplente")[0].count:0);
+        setCountDebtFreeClients(countC.data.filter((iten)=>iten.status!=="Inadimplente").length?countC.data.filter((iten)=>iten.status!=="Inadimplente")[0].count:0);
+      
 
       const listPaD = await listPaidDebts(token);
-      verifyOk(listPaD.ok, listPaD.data);
-      setListPaidDebts(listPaD.data);
-
+      // verifyOk(listPaD.ok, listPaD.data);
+      console.log(listPaD.data)
+      setListPaidDebts(listPaD.ok? listPaD.data:[]);
+      
       const listED = await listExpiredDebts(token);
-      verifyOk(listED.ok, listED.data);
-      setListExpiredDebts(listED.data);
-
+      // verifyOk(listED.ok, listED.data);
+      console.log(listED.ok)
+      setListExpiredDebts(listED.ok?listED.data:[]);
+      
       const listPeD = await listPendingDebts(token);
-      verifyOk(listPeD.ok, listPeD.data);
-      setListPendingDebts(listPeD.data);
-
+      console.log(listPeD)
+      // verifyOk(listPeD.ok, listPeD.data);
+      setListPendingDebts(listPeD.ok? listPeD.data:[]);
+      
       const listDC = await listDefaulterClients(token);
-      verifyOk(listDC.ok, listDC.data);
-      setListDefaulterClient(listDC.data);
-
+      console.log(listDC)
+      // verifyOk(listDC.ok, listDC.data);
+      setListDefaulterClient(listDC.ok? listDC.data:[]);
+      
       const listDFC = await listDebtFreeClients(token);
-      verifyOk(listDFC.ok, listDFC.data);
-      setListDebtFreeClient(listDFC.data);
+      console.log(listDFC)
+      // verifyOk(listDFC.ok, listDFC.data);
+      setListDebtFreeClient(listDFC.ok? listDFC.data:[]);
     } catch (error) {
       return toast.error(error.message);
     }
   }
 
-  function verifyOk(ok, data) {
-    if (!ok) {
-      return toast.warning(data);
-    }
-  }
+  // function verifyOk(ok, data) {
+  //   if (!ok) {
+  //     return toast.warning(data);
+  //   }
+  // }
 
   return (
     <main className="ResumeContainer">

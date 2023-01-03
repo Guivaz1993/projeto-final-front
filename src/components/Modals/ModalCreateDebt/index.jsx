@@ -57,6 +57,7 @@ function ModalCreateDebt() {
 
     try {
       const date = new Date(`${form.dueDate} 21:00:00 GMT-0300`)
+      console.log(form)
       const { data, ok } = await createDebtService({
         client_id: currentClient.id,
         description: form.description,
