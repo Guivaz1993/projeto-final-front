@@ -1,4 +1,6 @@
-const BASE_URL = "https://mc-callback.herokuapp.com";
+import {baseUrl} from "./baseurl"
+
+const BASE_URL = baseUrl;
 
 async function searchZipcode(value) {
     try {
